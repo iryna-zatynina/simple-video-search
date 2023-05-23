@@ -4,6 +4,8 @@ const videoList = document.querySelector('.video-list');
 const nextBtn = document.querySelector('.next-btn');
 const prevBtn = document.querySelector('.prev-btn');
 const pageNumber = document.querySelector('.page-number');
+const googleSearch = document.querySelector('.google-search');
+const googleSearchBtn = document.querySelector('.google-search-btn');
 
 const url = "https://customsearch.googleapis.com/customsearch/v1"
 const apiKey = "AIzaSyDWIPzV-Xg3A2EPyftQyRKTHo9_1100Z8Q";
@@ -64,6 +66,12 @@ function addItems(data) {
 
         prevBtn.style.display = currentPage > 1 ? "flex" : "none";
         nextBtn.style.display = currentPage < totalPages ? "flex" : "none";
+
+        googleSearch.style.display = 'block';
+        googleSearchBtn.innerHTML = `
+            <img src="search-icon.svg" alt="search">
+            Search <strong>${searchInput.value}</strong> on Google
+        `
     });
 
 }
@@ -97,10 +105,16 @@ nextBtn.addEventListener('click', (e) => {
     }
 })
 
-prevBtn.addEventListener("click", () => {
+prevBtn.addEventListener("click", (e) => {
+    e.preventDefault()
     if (currentPage > 1) {
         currentPage--;
         getData();
     }
+});
 
+googleSearchBtn.addEventListener("click", (e) => {
+    e.preventDefault()
+    const url = `https://www.google.com/search?q=${searchInput.value}`;
+    window.open(url, "_blank")
 });
