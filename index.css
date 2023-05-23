@@ -173,3 +173,62 @@ h1 {
     align-items: center;
     gap: 4px;
 }
+
+.preview {
+    position: fixed;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 360px;
+    height: 100vh;
+    background-color: #202124;
+    color: #fff;
+    display: grid;
+    grid-template-rows: 1fr auto;
+}
+
+.preview-main {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.preview-main img {
+    max-width: 100%;
+    max-height: 70vh;
+}
+
+.preview-title {
+    font-size: 14px;
+    margin: 16px 24px 8px;
+}
+
+.preview-info {
+    width: 100%;
+    display: flex;
+    color: #5D6067;
+    gap: 16px;
+    margin: 0 24px;
+}
+
+.preview-btns {
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    align-self: flex-end;
+}
+
+.preview-btns button {
+    padding: 12px 26px;
+    margin: 1.5em;
+    background: #2a8cff;
+    color: #fff;
+    font-size: 14px;
+    font-weight: 500;
+    gap: 10px;
+    border: none;
+    border-radius: 20px;
+}
+.preview-btns .close-btn {
+    background-color: #5d6067;
+}

@@ -33,7 +33,7 @@ const getData = async () => {
     addItems(data.items);
 }
 
-function addItems(data) {
+const addItems = (data) => {
     videoList.innerHTML = '';
 
     data.forEach((item) => {
@@ -44,6 +44,8 @@ function addItems(data) {
         const title = item.title;
         const artist = item.pagemap?.person?.[0]?.name || "Unknown artist"
         const views = getViewsNumber(item.pagemap?.videoobject?.[0]?.interactioncount);
+        const link = item.link;
+        console.log(item.pagemap?.videoobject?.[0]?.interactioncount)
 
         div.innerHTML = `
             <img class="img" src="${imgUrl}" alt="${title}">
@@ -60,6 +62,10 @@ function addItems(data) {
 
         videoList.appendChild(div);
 
+        div.addEventListener('click', e => {
+            e.preventDefault()
+            showPreview(imgUrl, title, artist, views, link);
+        })
 
         pageNumber.textContent = currentPage > 1 ? currentPage.toString() : "";
         pageNumber.style.display = currentPage > 1 ? "block" : "none";
@@ -80,7 +86,10 @@ const getViewsNumber = (num) => {
     if (num === undefined) {
         return "unknown"
     }
-    if (num.length > 6) {
+    if (num.length > 9) {
+        return num.slice(0, -9) + "b"
+    }
+    if (num.length > 6 &&  num.length <= 9) {
         return num.slice(0, -6) + "m"
     }
     if (num.length > 3 && num.length <= 6) {
@@ -89,6 +98,50 @@ const getViewsNumber = (num) => {
     if (num.length <= 3 ) {
         return num
     }
+}
+
+const showPreview = (imgUrl, title, artist, views, link) => {
+
+    const preview = document.createElement("div");
+    preview.classList.add("preview");
+
+    preview.innerHTML = `
+     <div class="preview-main">
+       <img src="${imgUrl}" alt="${title}">
+       <h4 class='preview-title'>${title}</h4>
+       <div class='preview-info'>
+         <span><img src="youtube-icon.svg" alt="youtube icon">  Youtube.com</span>
+         <img src="dot.svg" alt="dot">
+         <span>${views}</span>
+       </div>
+     </div>
+     <div class="preview-btns">
+       <button class="visit-btn">Visit</button>
+       <button class="close-btn">Close</button>
+     </div>
+   `;
+
+
+    preview.querySelector('.visit-btn').addEventListener("click", () => {
+        openVideo(link);
+        closePreview();
+    });
+    preview.querySelector('.close-btn').addEventListener("click", () => {
+        closePreview();
+    });
+
+    document.body.appendChild(preview);
+}
+
+const closePreview = () => {
+    const preview = document.querySelector(".preview");
+    if (preview) {
+        preview.remove();
+    }
+}
+
+const openVideo = (link) => {
+    window.open(link, "_blank");
 }
 
 
