@@ -2,7 +2,6 @@
     box-sizing: border-box;
 }
 
-
 body {
     font-family: 'Barlow', sans-serif;
     font-style: normal;
@@ -70,3 +69,60 @@ h1 {
 .search-btn:hover {
     transform: scale(1.1);
 }
+
+.item {
+    width: 100%;
+    display: flex;
+    align-items: stretch;
+    gap: 1rem;
+    padding: 0.6em;
+    margin: 0.5rem 0;
+    border-radius: 6px;
+    background-color: #fff;
+}
+
+.img {
+    width: 132px;
+    height: 74px;
+    object-fit: cover;
+    border-radius: 6px;
+    flex-shrink: 0;
+}
+
+.info {
+    flex-grow: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.info-title {
+    font-size: 14px;
+    margin: 0;
+    height: 34px;
+    overflow: hidden;
+}
+
+.info-artist {
+    font-size: 10px;
+    font-weight: 500;
+    margin: 0;
+    color: #9499a6;
+}
+
+.info-footer {
+    display: grid;
+    grid-template-columns: 10px auto auto;
+    gap: 4px;
+    align-items: center;
+    font-weight: 500;
+    font-size: 10px;
+    line-height: 10px;
+    letter-spacing: 0.0025em;
+    color: #5D6067;
+}
+.info-views {
+    justify-self: right;
+    margin: 0;
+}
+
