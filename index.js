@@ -1,30 +1,38 @@
 const searchButton = document.querySelector('.search-btn');
 const searchInput = document.querySelector('.search-input');
 const videoList = document.querySelector('.video-list');
-
+const nextBtn = document.querySelector('.next-btn');
+const prevBtn = document.querySelector('.prev-btn');
+const pageNumber = document.querySelector('.page-number');
 
 const url = "https://customsearch.googleapis.com/customsearch/v1"
 const apiKey = "AIzaSyDWIPzV-Xg3A2EPyftQyRKTHo9_1100Z8Q";
 const cxId = "22ea306c9f83a4126";
 
+let currentPage = 1;
+let totalPages = 0;
+const resultsPerPage = 10;
 
 const getData = async () => {
+
     const params = {
         key: apiKey,
         cx: cxId,
         q: searchInput.value,
         siteSearch: "youtube.com",
         orTerms: "music",
-        num: "10",
+        start: ((currentPage - 1) * resultsPerPage + 1).toString(),
+        num: resultsPerPage.toString()
     };
 
     const response = await fetch(url + "?" + new URLSearchParams(params));
     const data = await response.json();
+    totalPages = data.searchInformation.totalResults;
     addItems(data.items);
 }
 
 function addItems(data) {
-    console.log(data)
+    videoList.innerHTML = '';
 
     data.forEach((item) => {
         const div = document.createElement("div");
@@ -49,6 +57,13 @@ function addItems(data) {
         `;
 
         videoList.appendChild(div);
+
+
+        pageNumber.textContent = currentPage > 1 ? currentPage.toString() : "";
+        pageNumber.style.display = currentPage > 1 ? "block" : "none";
+
+        prevBtn.style.display = currentPage > 1 ? "flex" : "none";
+        nextBtn.style.display = currentPage < totalPages ? "flex" : "none";
     });
 
 }
@@ -73,3 +88,19 @@ searchButton.addEventListener('click', (e) => {
     e.preventDefault()
     getData();
 })
+
+nextBtn.addEventListener('click', (e) => {
+    e.preventDefault()
+    if (currentPage < totalPages) {
+        currentPage++;
+        getData();
+    }
+})
+
+prevBtn.addEventListener("click", () => {
+    if (currentPage > 1) {
+        currentPage--;
+        getData();
+    }
+
+});

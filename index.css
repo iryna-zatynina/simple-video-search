@@ -126,3 +126,31 @@ h1 {
     margin: 0;
 }
 
+.page-switcher {
+    display: flex;
+    align-items: center;
+    margin-top: 20px;
+    border-radius: 6px;
+    height: 48px;
+    background-color: white;
+}
+
+.prev-btn,
+.next-btn {
+    justify-content: center;
+    font-weight: 500;
+    flex: 1;
+    padding: 10px;
+    margin: 0 5px;
+    font-size: 14px;
+    border: none;
+    background-color: white;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    width: 16px;
+}
+
+.prev-btn {
+    display: none;
+}
