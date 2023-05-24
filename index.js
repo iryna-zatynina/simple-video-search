@@ -79,7 +79,7 @@ const addItems = (data) => {
                 <h4 class='info-title'>${title}</h4>
                 <p class='info-artist'>${artist}</p>
                 <div class='info-footer'>
-                  <img src="youtube-icon.svg" alt="youtube icon">
+                  <img src="./icons/youtube-icon.svg" alt="youtube icon">
                   <span>Youtube.com</span>
                   <p class='info-views'>${views} views</p>
                 </div> 
@@ -102,7 +102,7 @@ const addItems = (data) => {
 
             googleSearch.style.display = 'block';
             googleSearchBtn.innerHTML = `
-            <img src="search-icon.svg" alt="search">
+            <img src="./icons/search-icon.svg" alt="search">
             Search <strong>${searchInput.value}</strong> on Google
         `
         }
@@ -137,8 +137,8 @@ const showPreview = (imgUrl, title, artist, views, link) => {
        <img src="${imgUrl}" alt="${title}">
        <h4 class='preview-title'>${title}</h4>
        <div class='preview-info'>
-         <span><img src="youtube-icon.svg" alt="youtube icon">  Youtube.com</span>
-         <img src="dot.svg" alt="dot">
+         <span><img src="./icons/youtube-icon.svg" alt="youtube icon">  Youtube.com</span>
+         <img src="./icons/dot.svg" alt="dot">
          <span>${views}</span>
        </div>
      </div>
