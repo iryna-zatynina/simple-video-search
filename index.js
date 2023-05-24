@@ -1,6 +1,7 @@
 const searchButton = document.querySelector('.search-btn');
 const searchInput = document.querySelector('.search-input');
 const videoList = document.querySelector('.video-list');
+const pageSwitcher = document.querySelector('.page-switcher');
 const nextBtn = document.querySelector('.next-btn');
 const prevBtn = document.querySelector('.prev-btn');
 const pageNumber = document.querySelector('.page-number');
@@ -8,8 +9,8 @@ const googleSearch = document.querySelector('.google-search');
 const googleSearchBtn = document.querySelector('.google-search-btn');
 
 const url = "https://customsearch.googleapis.com/customsearch/v1"
-const apiKey = "AIzaSyDWIPzV-Xg3A2EPyftQyRKTHo9_1100Z8Q";
-const cxId = "22ea306c9f83a4126";
+const apiKey = "AIzaSyA2gkcC7NS2AHiC1p_crOF879p1nVwWW6o";
+const cxId = "17a7cf0799f3149fd";
 
 let currentPage = 1;
 let totalPages = 0;
@@ -22,7 +23,7 @@ const getData = async () => {
         cx: cxId,
         q: searchInput.value,
         siteSearch: "youtube.com",
-        orTerms: "music",
+        orTerms: "video",
         start: ((currentPage - 1) * resultsPerPage + 1).toString(),
         num: resultsPerPage.toString()
     };
@@ -36,19 +37,44 @@ const getData = async () => {
 const addItems = (data) => {
     videoList.innerHTML = '';
 
+    data.sort((a, b) => {
+        const item1 = a.pagemap?.videoobject?.[0].interactioncount;
+        const item2 = b.pagemap?.videoobject?.[0].interactioncount;
+        return item2 - item1
+    })
     data.forEach((item) => {
-        const div = document.createElement("div");
-        div.classList.add("item");
+        if (item.pagemap?.videoobject) {
+            const div = document.createElement("div");
+            div.classList.add("item");
 
-        const imgUrl = item.pagemap?.cse_image?.[0]?.src;
-        const title = item.title;
-        const artist = item.pagemap?.person?.[0]?.name || "Unknown artist"
-        const views = getViewsNumber(item.pagemap?.videoobject?.[0]?.interactioncount);
-        const link = item.link;
-        console.log(item.pagemap?.videoobject?.[0]?.interactioncount)
+            const imgUrl = item.pagemap?.cse_image?.[0]?.src;
+            const title = item.title;
+            const artist = item.pagemap?.person?.[0]?.name || "Unknown artist"
+            const views = getViewsNumber(item.pagemap?.videoobject?.[0]?.interactioncount);
+            const link = item.link;
 
-        div.innerHTML = `
-            <img class="img" src="${imgUrl}" alt="${title}">
+            const customizeDuration = (duration) => {
+                if (duration) {
+                    const newDuration = duration.slice(2, -1).replace("M", ":");
+                    if (newDuration.length === 3) {
+                        const array = newDuration.split('')
+                        array.splice(-1, 0, "0")
+                        return array.join('')
+                    }
+                    return newDuration
+                } else {
+                    return "..."
+                }
+
+            }
+            const duration = customizeDuration(item.pagemap?.videoobject?.[0]?.duration)
+
+
+            div.innerHTML = `
+            <div class="img-block">
+                <img class="img" src="${imgUrl}" alt="${title}">
+                <span class="duration">${duration}</span>
+            </div>
             <div class="info">
                 <h4 class='info-title'>${title}</h4>
                 <p class='info-artist'>${artist}</p>
@@ -60,26 +86,27 @@ const addItems = (data) => {
             </div>
         `;
 
-        videoList.appendChild(div);
+            videoList.appendChild(div);
 
-        div.addEventListener('click', e => {
-            e.preventDefault()
-            showPreview(imgUrl, title, artist, views, link);
-        })
+            div.addEventListener('click', e => {
+                e.preventDefault()
+                showPreview(imgUrl, title, artist, views, link);
+            })
 
-        pageNumber.textContent = currentPage > 1 ? currentPage.toString() : "";
-        pageNumber.style.display = currentPage > 1 ? "block" : "none";
+            pageSwitcher.style.display = "flex";
+            pageNumber.textContent = currentPage > 1 ? currentPage.toString() : "";
+            pageNumber.style.display = currentPage > 1 ? "block" : "none";
 
-        prevBtn.style.display = currentPage > 1 ? "flex" : "none";
-        nextBtn.style.display = currentPage < totalPages ? "flex" : "none";
+            prevBtn.style.display = currentPage > 1 ? "flex" : "none";
+            nextBtn.style.display = currentPage < totalPages ? "flex" : "none";
 
-        googleSearch.style.display = 'block';
-        googleSearchBtn.innerHTML = `
+            googleSearch.style.display = 'block';
+            googleSearchBtn.innerHTML = `
             <img src="search-icon.svg" alt="search">
             Search <strong>${searchInput.value}</strong> on Google
         `
+        }
     });
-
 }
 
 const getViewsNumber = (num) => {
